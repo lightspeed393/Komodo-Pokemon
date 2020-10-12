@@ -68,7 +68,7 @@
           >You're about to {{orderText}} {{quantity}} {{name}} !</v-card-title>
           <v-card-text class="d-flex justify-center">
             Please click on the button below to {{ orderText }}:
-            {{ quantity }} {{name}} for {{ totals }} MORTY in total.
+            {{ quantity }} {{name}} for {{ totals }} SPACE in total.
           </v-card-text>
           <v-card-actions class="d-flex justify-center">
             <v-btn color="warning" @click="confirmOrder(orderText)">Confirm</v-btn>
@@ -81,7 +81,7 @@
 
 <script>
 import axios from "axios";
-import pokemonTypeColors from "~/static/pokemonTypeColors.js";
+import pokemonTypeColors from "~/static/tokenColors.js";
 export default {
   props: {
     localProxy: {

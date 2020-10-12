@@ -1,103 +1,153 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col cols="12" sm="6" md="3">
-        <v-text-field
-          v-model="configData.rpcHost"
-          label="RPChost"
-          placeholder="127.0.0.1 (local Proxy)"
-        ></v-text-field>
-      </v-col>
+  <v-form>
+    <v-container>
+      <v-row>
+        <v-col cols="12" sm="6" md="3">
+          <v-text-field
+            v-model="configData.rpcHost"
+            label="RPChost"
+            placeholder="127.0.0.1 (local proxy)"
+          ></v-text-field>
+        </v-col>
 
-      <v-col cols="12" sm="6" md="3">
-        <v-text-field v-model="configData.rpcPort" label="RPCport" placeholder="35593 (SPACE)"></v-text-field>
-      </v-col>
+        <v-col cols="12" sm="6" md="3">
+          <v-text-field v-model="configData.rpcPort" label="RPCport" placeholder="35593 (SPACE)"></v-text-field>
+        </v-col>
 
-      <v-col cols="12" sm="6" md="3">
-        <v-text-field v-model="configData.rpcUser" label="RPCuser" placeholder="your_RPC_username"></v-text-field>
-      </v-col>
+        <v-col cols="12" sm="6" md="3">
+          <v-text-field
+            v-model="configData.rpcUser"
+            label="RPCuser"
+            placeholder="your_RPC_username"
+          ></v-text-field>
+        </v-col>
 
-      <v-col cols="12" sm="6" md="3">
-        <v-text-field
-          v-model="configData.rpcPassword"
-          label="RPCpassword"
-          placeholder="your_super_secret_RPC_password"
-        ></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field v-model="pubkeyData" label="Your Public Key" placeholder></v-text-field>
-      </v-col>
-      <v-col cols="12" sm="6" md="6">
-        <v-text-field
-          readonly
-          v-model="RaddressComputed"
-          label="Your R-Address"
-          placeholder="Your_R_address"
-        ></v-text-field>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="12" sm="3" md="2">
-        <v-btn color="primary" v-on:click="submitHandler">Load Orders</v-btn>
-      </v-col>
-      <!-- <v-col cols="12" sm="3" md="2">
-          <v-btn color="success" v-on:click="verifySignature" :disabled="isMine"
-            >Verify</v-btn
-          >
-      </v-col>-->
-      <!-- <v-col cols="12" sm="3" md="2">
+        <v-col cols="12" sm="6" md="3">
+          <v-text-field
+            v-model="configData.rpcPassword"
+            label="RPCpassword"
+            placeholder="your_super_secret_RPC_password"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6">
+          <v-text-field v-model="pubkeyData" label="Your Public Key" placeholder></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6">
+          <v-text-field
+            readonly
+            v-model="RaddressComputed"
+            label="Your R-Address"
+            placeholder="Your_R_address"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6">
+          <v-text-field
+            v-model="destPubkeyData"
+            label="Destination Public Key to transfer"
+            placeholder
+            :disabled="!isMine"
+            color="warning"
+          ></v-text-field>
+        </v-col>
+        <v-col cols="12" sm="6" md="6">
+          <v-text-field
+            readonly
+            v-model="destRaddressComputed"
+            label="Destination R-Address"
+            placeholder="Your_R_address"
+            :disabled="!isMine"
+            color="warning"
+          ></v-text-field>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="6" sm="2" md="1">
+          <v-btn color="primary" v-on:click="submitHandler">Submit</v-btn>
+        </v-col>
+        <v-col cols="6" sm="2" md="1">
+          <v-btn color="success" v-on:click="verifySignature" :disabled="isMine">Verify</v-btn>
+        </v-col>
+        <v-col cols="6" sm="3" md="2">
           <v-switch
             v-model="transferEnabled"
-            label="transfer"
+            :label="transferSwitchLabel"
             color="warning"
             class="my-0"
+            :disabled="placeOrderEnabled"
           ></v-switch>
-      </v-col>-->
-      <!-- <v-col cols="12" sm="3" md="2">
+        </v-col>
+        <v-col cols="6" sm="3" md="2">
+          <v-switch
+            v-model="placeOrderEnabled"
+            :label="askBidSwitchLabel"
+            color="warning"
+            class="my-0"
+            :disabled="transferEnabled"
+          ></v-switch>
+        </v-col>
+        <v-col cols="6" sm="3" md="2">
+          <v-btn color="primary" v-on:click="loadTokenOrders" :disabled="tab1active">Refresh Orders</v-btn>
+        </v-col>
+        <!-- <v-col cols="6" sm="3" md="2"></v-col> -->
+        <!-- <v-col cols="6" sm="3" md="2">
+          <v-btn color="primary" v-on:click="getUnconfirmedBalance">GET2</v-btn>
+        </v-col>-->
+        <v-col cols="6" sm="3" md="3">
+          <p>
+            SPACE balance:
+            <span class="font-weight-bold title">{{coinBalance}}</span>
+          </p>
+          <p class="mb-0">
+            (
+            <span class="green--text">{{coinConfirmedBalance}}</span>+
+            <span class="red--text">{{coinUnconfirmedBalance}}</span>)
+          </p>
+        </v-col>
+        <!-- <v-col cols="12" sm="3" md="2">
           <v-btn
             color="warning"
             v-on:click="transferTokenDialog = true"
             :disabled="!isMine"
             >Transfer</v-btn
           >
-      </v-col>-->
-      <!-- <v-col cols="12" sm="6" md="3">
+        </v-col>-->
+        <!-- <v-col cols="12" sm="6" md="3">
           <v-btn color="warning" v-on:click="testHandler">Test</v-btn>
         </v-col>
         <v-col cols="12" sm="6" md="3">
           <v-btn color="warning" v-on:click="posttHandler">Post</v-btn>
-      </v-col>-->
-      <!-- <v-col cols="12" sm="6" md="6">
+        </v-col>-->
+        <!-- <v-col cols="12" sm="6" md="6">
           <v-alert
             dense
             border="left"
             type="warning"
             v-show="!pubkeyRaddressMatched"
           >Your pubkey doesn't match with your R-address</v-alert>
-      </v-col>-->
-    </v-row>
-    <!-- <li>
+        </v-col>-->
+      </v-row>
+      <!-- <li>
         <ul v-for="element in tokenInfoDataComp">{{element}}</ul>
       </li>
       <li>
         <ul v-for="element in balanceListDataComp">{{element}}</ul>
-    </li>-->
-    <!-- <li>
+      </li>-->
+      <!-- <li>
         <ul v-for="element in myPokemonAPIDataRaw">{{element}}</ul>
-    </li>-->
-    <h3 v-if="pokemonAPIDataLoaded && !totalBalanceComputed">
-      You don't have any tokens yet!
-      <v-icon>mdi-emoticon-sad</v-icon>
-    </h3>
-    <!-- <PokemonCard
+      </li>-->
+      <h3 v-if="pokemonAPIDataLoaded && !totalBalanceComputed">
+        You don't have any tokens yet!
+        <v-icon>mdi-emoticon-sad</v-icon>
+      </h3>
+      <!-- <PokemonCard
         v-if="pokemonAPIDataLoaded && totalBalance"
         v-for="element in myPokemonAPIDataRaw"
         v-bind:myPokemonInfo="element"
         v-bind:isMine="isMine"
         v-bind:signed="signed"
         v-bind:key="element.pokemonTokenData[0].number"
-    ></PokemonCard>-->
-    <!-- <PokemonCard
+      ></PokemonCard>-->
+      <!-- <PokemonCard
         v-if="balanceMapping[name]"
         v-for="(value, name) of myPokemonAPIDataRaw"
         v-bind:tokenID="name"
@@ -105,25 +155,42 @@
         v-bind:balance="balanceMapping[name]"
         v-bind:isMine="isMine"
         v-bind:signed="signed"
-    ></PokemonCard>-->
-    <!-- <v-alert dense border="left" type="warning" v-show="showWarning"
+      ></PokemonCard>-->
+      <!-- <v-alert dense border="left" type="warning" v-show="showWarning"
         >Please sign & verify with correct private/public keys pair</v-alert
-    >-->
-    <v-dialog v-model="showWarning" max-width="450">
-      <v-card>
-        <v-card-title class="headline d-flex justify-center">Signature verification failed !</v-card-title>
-        <v-card-text
-          class="d-flex justify-center"
-        >Please sign & verify with correct private/public keys pair !</v-card-text>
-        <v-card-actions class="d-flex justify-center">
-          <v-btn color="warning" @click="showWarning = false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <!-- <v-dialog v-model="transferTokenDialog" max-width="500">
+      >-->
+      <v-alert
+        v-if="pendingtx"
+        type="warning"
+      >You have unconfirmed transaction(s). Your balance may not display correctly !</v-alert>
+      <v-dialog v-model="showWarning" max-width="450">
+        <v-card>
+          <v-card-title class="headline d-flex justify-center">Signature verification failed !</v-card-title>
+          <v-card-text
+            class="d-flex justify-center"
+          >Please sign & verify with correct private/public keys pair !</v-card-text>
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="warning" @click="showWarning = false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <v-dialog v-model="showExplorerURL" max-width="800">
+        <v-card>
+          <v-card-title class="headline d-flex justify-center">Transaction broadcasted !</v-card-title>
+          <v-card-text class="d-flex justify-center">Check your tx status at</v-card-text>
+          <v-card-text class="justify-center">
+            <a :href="txURL">{{txURL}}</a>
+          </v-card-text>
+
+          <v-card-actions class="d-flex justify-center">
+            <v-btn color="success" @click="showExplorerURL = false">Close</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+      <!-- <v-dialog v-model="transferTokenDialog" max-width="500">
         <v-card>
           <v-card-title class="headline d-flex justify-center"
-            >You're about to transfer your Pokémon !</v-card-title
+            >You're about to transfer your token!</v-card-title
           >
           <v-card-text class="d-flex justify-center">
             Please click on the button below to confirm.
@@ -134,11 +201,28 @@
             </v-btn>
           </v-card-actions>
         </v-card>
-    </v-dialog>-->
+      </v-dialog>-->
+      <v-tabs centered icons-and-text v-model="tab" background-color="transparent">
+        <v-tabs-slider></v-tabs-slider>
+        <v-tab href="#tab-1">
+          Your Tokens
+          <v-icon>mdi-information-outline</v-icon>
+        </v-tab>
 
-    <!-- <div class="d-flex flex-row flex-wrap">
+        <v-tab href="#tab-2">
+          Marketplace
+          <v-icon>mdi-shuffle</v-icon>
+        </v-tab>
+      </v-tabs>
+      <v-tabs-items v-model="tab" color="transparent">
+        <v-tab-item value="tab-1" color="transparent"></v-tab-item>
+        <v-tab-item value="tab-2"></v-tab-item>
+      </v-tabs-items>
+      <div v-show="tab1active" class="d-flex flex-row flex-wrap" color="transparent">
         <PokemonCard
+          v-on:orderConfirmed="pendingtxBroadcast"
           v-if="pokemonAPIDataLoaded && balanceMapping[name]"
+          v-show="tab1active"
           v-for="(value, name) of myPokemonAPIDataRaw"
           v-bind:tokenID="name"
           v-bind:myPokemonInfo="value"
@@ -147,20 +231,34 @@
           v-bind:signed="signed"
           v-bind:key="name"
           :transferEnabled="transferEnabled"
+          :placeOrderEnabled="placeOrderEnabled"
           :localProxy="localProxy"
           :destPubkey="destPubkeyData"
         ></PokemonCard>
-    </div>-->
-    <div class="d-flex flex-row flex-wrap">
-      <TokenOrderCard v-for="order in ordersData" :key="order.txid" :orderData="order"></TokenOrderCard>
-    </div>
-  </v-container>
+      </div>
+      <div v-show="tab2active" class="d-flex flex-row flex-wrap" color="transparent">
+        <TokenOrderCard
+          v-on:orderConfirmed="pendingtxBroadcast"
+          v-show="tab2active"
+          v-for="order in ordersData"
+          :key="order.txid"
+          :localProxy="localProxy"
+          :orderData="order"
+          :name="myPokemonAPIDataRaw[order.tokenid][0].name"
+          :number="myPokemonAPIDataRaw[order.tokenid][0].number"
+          :types="[...myPokemonAPIDataRaw[order.tokenid][0].types]"
+          :sprite="myPokemonAPIDataRaw[order.tokenid][0].sprite"
+        ></TokenOrderCard>
+      </div>
+    </v-container>
+  </v-form>
 </template>
 
 <script>
-// import RpcClient from "~/modules/bitcoindrpc";
+import RpcClient from "~/modules/bitcoindrpc";
 import pokemontxlist from "~/static/pokemontxList.js";
 import axios from "axios";
+import PokemonCard from "~/components/PokemonCard_test";
 import TokenOrderCard from "~/components/tokenOrderCard";
 import rpcConfig from "~/rpcConfig";
 import proxyConfig from "~/proxyConfig";
@@ -168,6 +266,7 @@ import SHA256 from "crypto-js/sha256";
 import RIPEMD160 from "crypto-js/ripemd160";
 import encHEX from "crypto-js/enc-hex";
 import bs58 from "bs58";
+import colors from "~/node_modules/vuetify/lib/util/colors";
 // import dotenv from "dotenv";
 //import RpcClient from "node-komodo-rpc";
 //import simple from "~/modules/simple";
@@ -175,6 +274,7 @@ import bs58 from "bs58";
 // import coreApi from "~/src/api/coreApi";
 export default {
   components: {
+    PokemonCard,
     TokenOrderCard
   },
   data: () => ({
@@ -204,10 +304,17 @@ export default {
     signed: false,
     showWarning: false,
     transferEnabled: false,
+    placeOrderEnabled: false,
     transferTokenDialog: false,
     localProxy: "",
+    tab: null,
     ordersPerTokenData: [],
-    ordersData: []
+    ordersData: [],
+    coinConfirmedBalance: 0.0,
+    coinUnconfirmedBalance: 0.0,
+    pendingtx: false,
+    showExplorerURL: false,
+    txURL: ""
   }),
   mounted() {
     // const testfunction = require("~/src/test");
@@ -257,35 +364,45 @@ export default {
           : rpcConfig.rpcPort
       };
 
-      // this.rpc = new RpcClient(config);
+      this.rpc = new RpcClient(config);
 
+      //   this.rpc.getInfo(function(err, ret) {
+      //     if (err) {
+      //       console.error(err);
+      //     } else {
+      //       console.log(ret);
+      //     }
+      //   });
       var temp = [];
       let vm = this;
+      let rpcConfigURL =  `http://${proxyConfig.proxyHost}:${proxyConfig.proxyPort}/rpcconfig`
+        // axios.post(rpcConfigURL,
+        //     {
+        //       method: "set",
+        //       params: [...arg]
+        //     }
 
-      this.tokenOrdersLoading();
-      // if (!this.interval) {
-      //   this.interval = setInterval(this.balanceChecking, 10000);
-      // }
-    },
-    tokenOrdersLoading() {
-      console.log("Loading orders");
-      this.ordersPerTokenData = [];
-      this.ordersData = [];
-      let vm = this;
-      Object.keys(pokemontxlist).forEach(tokenid => {
-        axios
-          .post(vm.localProxy, { method: "tokenOrders", params: [tokenid] })
-          .then(function(response) {
-            console.log(response.data);
-            // vm.tokenOrdersData.push(response.data);
-            if (response.data) {
-              vm.ordersPerTokenData.push(response.data);
-              let temp = [...response.data];
-              temp.forEach(order => vm.ordersData.push(order));
-            }
-          })
-          .catch(error => console.error(error));
-      });
+        //   )
+
+      this.balanceChecking();
+      if (!this.interval) {
+        this.interval = setInterval(this.balanceChecking, 10000);
+      }
+      //   this.rpc.tokenBalance(pokemontxlist[0], testpubkey[1], function(err, ret) {
+      //     if (err) {
+      //       console.error(err);
+      //     } else {
+      //       console.log(ret.result);
+      //     }
+      //   });
+
+      //   this.rpc.tokenInfo(pokemontxlist[0], function(err, ret) {
+      //     if (err) {
+      //       console.error(err);
+      //     } else {
+      //       console.log(ret.result);
+      //     }
+      //   });
     },
     balanceChecking() {
       console.log("checking balance");
@@ -328,8 +445,75 @@ export default {
             }
           })
           .catch(error => console.error(error));
+
+        // vm.rpc.tokenBalance(...arg, function(err, ret) {
+        //   if (err) {
+        //     console.error(err);
+        //   } else {
+        //     let balance = ret.result.balance;
+        //     vm.totalBalance += balance;
+        //     // vm.balanceListDataRaw.push(ret.result);
+        //     // vm.balanceMapping[ret.result.tokenid] = ret.result.balance;
+        //     vm.$set(vm.balanceMapping, ret.result.tokenid, balance);
+        //     if (!vm.pokemonAPIDataLoaded) {
+        //       let pokemonName = pokemontxlist[tokenid];
+        //       let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${pokemonName}`;
+        //       axios
+        //         .get(pokemonUrl)
+        //         .then(reponse => {
+        //           console.log("axios called!");
+        //           vm.$set(vm.myPokemonAPIDataRaw, tokenid, reponse.data);
+        //         })
+        //         .catch(error => console.log(error))
+        //         .finally(() => (vm.pokemonAPIDataLoaded = true));
+        //     }
+        //   }
+        // });
       });
+      axios
+        .all([
+          axios.post(vm.localProxy, { method: "getBalance", params: [] }),
+          axios.post(vm.localProxy, {
+            method: "getUnconfirmedBalance",
+            params: []
+          })
+        ])
+        .then(response => {
+          // console.log("conf balance:", response[0].data);
+          // console.log("unconf balance:", response[1].data);
+          this.coinConfirmedBalance = parseFloat(response[0].data).toFixed(4);
+          this.coinUnconfirmedBalance = parseFloat(response[1].data).toFixed(4);
+          if (this.coinUnconfirmedBalance > 0) {
+            this.pendingtx = true;
+          } else {
+            this.pendingtx = false;
+          }
+        })
+        .catch(error => {
+          console.error(error[0]);
+          console.error(error[1]);
+        });
     },
+    // getBalance() {
+    //   let vm = this;
+    //   axios
+    //     .all([
+    //       axios.post(vm.localProxy, { method: "getBalance", params: [] }),
+    //       axios.post(vm.localProxy, {
+    //         method: "getUnconfirmedBalance",
+    //         params: []
+    //       })
+    //     ])
+    //     .then(response => {
+    //       console.log("conf balance:", response[0].data);
+    //       console.log("unconf balance:", response[1].data);
+    //     })
+    //     .catch(error => {
+    //       console.error(error[0]);
+    //       console.error(error[1]);
+    //     });
+    // },
+    // getUnconfirmedBalance() {},
     verifySignature() {
       console.log(rpcConfig.rpcRaddress);
       // const localProxy = `http://${proxyConfig.proxyHost}:${proxyConfig.proxyPort}/calls`;
@@ -403,9 +587,42 @@ export default {
         method: "tokenTransfer",
         params: [address, vm.destPubkeyData, 1]
       });
+    },
+    loadTokenOrders() {
+      console.log("Loading orders");
+      this.ordersPerTokenData = [];
+      this.ordersData = [];
+      let vm = this;
+      Object.keys(pokemontxlist).forEach(tokenid => {
+        axios
+          .post(vm.localProxy, { method: "tokenOrders", params: [tokenid] })
+          .then(function(response) {
+            console.log(response.data);
+            // vm.tokenOrdersData.push(response.data);
+            if (response.data) {
+              vm.ordersPerTokenData.push(response.data);
+              let temp = [...response.data];
+              temp.forEach(order => vm.ordersData.push(order));
+            }
+          })
+          .catch(error => console.error(error));
+      });
+    },
+    pendingtxBroadcast(txid) {
+      this.pendingtx = true;
+      this.showExplorerURL = true;
+      this.txURL = `https://space.explorer.dexstats.info/tx/${txid}`;
+      // console.log(txURL);
     }
   },
+
   computed: {
+    coinBalance() {
+      return (
+        parseFloat(this.coinConfirmedBalance) +
+        parseFloat(this.coinUnconfirmedBalance)
+      );
+    },
     // balanceListDataComp() {
     //   return this.balanceListDataRaw.map(element => {
     //     return { tokenid: element.tokenid, balance: element.balance };
@@ -479,7 +696,18 @@ export default {
       // console.log("parse data=", encHEX.parse(this.pubkeyData));
       return this.RaddressComputed == this.RaddressData;
     },
-
+    tab1active() {
+      return this.tab === "tab-1";
+    },
+    tab2active() {
+      return this.tab === "tab-2";
+    },
+    transferSwitchLabel() {
+      return this.transferEnabled ? "Disable Transfer" : "Enable Transfer";
+    },
+    askBidSwitchLabel() {
+      return this.placeOrderEnabled ? "Disable ask/bid" : "Enable ask/bid";
+    },
     tokenIDtoInfoMapping() {
       //this.myPokemonAPIDataRaw
       //balanceMapping
@@ -496,5 +724,4 @@ export default {
 };
 </script>
 
-<style>
-</style>
+<style></style>

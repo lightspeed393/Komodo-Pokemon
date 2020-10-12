@@ -1,5 +1,5 @@
 const colours = Object.freeze({
-  SWTT: "#A8A77A",
+  Normal: "#A8A77A",
   Fire: "#EE8130",
   Water: "#6390F0",
   Electric: "#F7D02C",

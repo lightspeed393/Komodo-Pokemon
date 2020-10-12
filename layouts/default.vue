@@ -45,7 +45,7 @@
       </v-list>
     </v-navigation-drawer>
     <v-footer :fixed="fixed" app>
-      <span>&copy; 2019 PHBA2061</span>
+      <span>&copy; 2020 SpaceWorks</span>
     </v-footer>
   </v-app>
 </template>
@@ -67,6 +67,11 @@ export default {
           icon: "mdi-pokeball",
           title: "Pokédex",
           to: "/pokedex"
+        },
+        {
+          icon: "mdi-pokeball",
+          title: "Home",
+          to: "/home"
         }
       ],
       miniVariant: false,

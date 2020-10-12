@@ -11,7 +11,7 @@
         </v-col>
 
         <v-col cols="12" sm="6" md="3">
-          <v-text-field v-model="configData.rpcPort" label="RPCport" placeholder="16348 (MORTY)"></v-text-field>
+          <v-text-field v-model="configData.rpcPort" label="RPCport" placeholder="35593 (SPACE)"></v-text-field>
         </v-col>
 
         <v-col cols="12" sm="6" md="3">
@@ -86,7 +86,7 @@
           ></v-switch>
         </v-col>
         <v-col cols="6" sm="3" md="2">
-          <v-btn color="primary" v-on:click="loadTokenOrders" :disabled="tab1active">Refresh Orders</v-btn>
+          <v-btn color="primary" v-on:click="loadTokenOrders" :disabled="tab1active">View Orders</v-btn>
         </v-col>
         <!-- <v-col cols="6" sm="3" md="2"></v-col> -->
         <!-- <v-col cols="6" sm="3" md="2">
@@ -94,7 +94,7 @@
         </v-col>-->
         <v-col cols="6" sm="3" md="3">
           <p>
-            MORTY balance:
+            SPACE balance:
             <span class="font-weight-bold title">{{coinBalance}}</span>
           </p>
           <p class="mb-0">
@@ -136,7 +136,7 @@
         <ul v-for="element in myPokemonAPIDataRaw">{{element}}</ul>
       </li>-->
       <h3 v-if="pokemonAPIDataLoaded && !totalBalanceComputed">
-        You don't have any Pokémon yet, please catch some !
+        You don't have any tokens yet!
         <v-icon>mdi-emoticon-sad</v-icon>
       </h3>
       <!-- <PokemonCard
@@ -190,7 +190,7 @@
       <!-- <v-dialog v-model="transferTokenDialog" max-width="500">
         <v-card>
           <v-card-title class="headline d-flex justify-center"
-            >You're about to transfer your Pokémon !</v-card-title
+            >You're about to transfer your token!</v-card-title
           >
           <v-card-text class="d-flex justify-center">
             Please click on the button below to confirm.
@@ -205,7 +205,7 @@
       <v-tabs centered icons-and-text v-model="tab" background-color="transparent">
         <v-tabs-slider></v-tabs-slider>
         <v-tab href="#tab-1">
-          Your Pokémon
+          Your Tokens
           <v-icon>mdi-information-outline</v-icon>
         </v-tab>
 
@@ -256,7 +256,7 @@
 
 <script>
 import RpcClient from "~/modules/bitcoindrpc";
-import pokemontxlist from "~/static/pokemontxList.js";
+import pokemontxlist from "~/static/tokenList.js";
 import axios from "axios";
 import PokemonCard from "~/components/PokemonCard_test";
 import TokenOrderCard from "~/components/tokenOrderCard";
@@ -611,7 +611,7 @@ export default {
     pendingtxBroadcast(txid) {
       this.pendingtx = true;
       this.showExplorerURL = true;
-      this.txURL = `https://morty.explorer.dexstats.info/tx/${txid}`;
+      this.txURL = `https://space.explorer.dexstats.info/tx/${txid}`;
       // console.log(txURL);
     }
   },

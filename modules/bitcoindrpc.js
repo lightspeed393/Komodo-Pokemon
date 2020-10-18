@@ -251,6 +251,7 @@ RpcClient.callspec = {
   signRawTransactionWithWallet: "str",
   stop: "",
   tokenBalance: "str str",
+  tokenCreate: "",
   tokenList: "",
   tokenInfo: "str",
   tokenTransfer: "str str str",

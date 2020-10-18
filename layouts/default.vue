@@ -65,13 +65,18 @@ export default {
         },
         {
           icon: "mdi-pokeball",
-          title: "Pokédex",
-          to: "/pokedex"
+          title: "Home",
+          to: "/home"
         },
         {
           icon: "mdi-pokeball",
-          title: "Home",
-          to: "/home"
+          title: "Marketplace",
+          to: "/marketplace"
+        },
+        {
+          icon: "mdi-pokeball",
+          title: "Create",
+          to: "/create"
         }
       ],
       miniVariant: false,

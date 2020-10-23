@@ -13,6 +13,5 @@
 //   }
 // ];
 export default {
-  e6f7accda67f906f4e45449c44a28e968ceead98b7d7a8a22cda9282e73c782b: "SWTT",
-  c4b49827550024f657c9b0e7327985a9d5f9a3053cc3174fd53428adb448e523: "Mudkip"
+  e6f7accda67f906f4e45449c44a28e968ceead98b7d7a8a22cda9282e73c782b: "SWTT"
 };

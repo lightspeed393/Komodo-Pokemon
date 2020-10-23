@@ -1,7 +1,7 @@
 // import "dotenv/config";
 import RpcClient from "../modules/bitcoindrpc.js";
 import axios from "axios";
-import pokemontxList from "../static/pokemontxList";
+import tokentxList from "../static/tokenList";
 import rpcConfig from "../rpcConfig.js";
 var express = require("express");
 var cors = require("cors");
@@ -41,15 +41,15 @@ var tokenList = [];
 //  }
 //});
 
-//pokemontxList.forEach(element => {
+//tokentxList.forEach(element => {
 //  console.log(element);
 //});
 
-console.log(pokemontxList);
+console.log(tokenList);
 
-Object.keys(pokemontxList).forEach(tokentxid => {
-  let pokemonName = pokemontxList[tokentxid];
-  let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${pokemonName}`;
+Object.keys(tokenList).forEach(tokentxid => {
+  let tokenName = tokentxList[tokentxid];
+  let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${tokenName}`;
   axios
     .get(pokemonUrl)
     .then(response => {

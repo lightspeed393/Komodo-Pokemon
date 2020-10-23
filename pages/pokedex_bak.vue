@@ -116,7 +116,7 @@
 
 <script>
 import RpcClient from "~/modules/bitcoindrpc";
-import pokemontxlist from "~/static/pokemontxList.js";
+import tokentxList from "~/static/tokenList.js";
 import axios from "axios";
 import PokemonCard from "~/components/PokemonCard";
 import rpcConfig from "~/rpcConfig";
@@ -163,7 +163,7 @@ export default {
     // const testfunction = require("~/src/test");
     // testfunction.hello();
     // testfunction.goodbye();
-    // console.log(pokemontxlist);
+    // console.log(tokentxList);
     // var text = '{"name":"John", "age":30, "city":"New York"}';
     // console.log("this is a text", text);
     // text = text.replace(/\\/g, "");
@@ -240,7 +240,7 @@ export default {
       //     .then(response => (vm.tokenListDataRaw = [...response.data]))
       //     .catch(error => console.error(error));
 
-      //   Object.keys(pokemontxlist).forEach(tokenid => {
+      //   Object.keys(tokentxList).forEach(tokenid => {
       //     vm.rpc.tokenInfo(tokenid, function(err, ret) {
       //       if (err) {
       //         console.error(err);
@@ -254,7 +254,7 @@ export default {
       if (!this.interval) {
         this.interval = setInterval(this.balanceChecking, 10000);
       }
-      //   this.rpc.tokenBalance(pokemontxlist[0], testpubkey[1], function(err, ret) {
+      //   this.rpc.tokenBalance(tokentxList[0], testpubkey[1], function(err, ret) {
       //     if (err) {
       //       console.error(err);
       //     } else {
@@ -262,7 +262,7 @@ export default {
       //     }
       //   });
 
-      //   this.rpc.tokenInfo(pokemontxlist[0], function(err, ret) {
+      //   this.rpc.tokenInfo(tokentxList[0], function(err, ret) {
       //     if (err) {
       //       console.error(err);
       //     } else {
@@ -273,7 +273,7 @@ export default {
     balanceChecking() {
       console.log("checking balance");
       let vm = this;
-      Object.keys(pokemontxlist).forEach(tokenid => {
+      Object.keys(tokentxList).forEach(tokenid => {
         var arg = vm.pubkeyData ? [tokenid, vm.pubkeyData] : [tokenid];
 
         const localHost = `http://${proxyConfig.proxyHost}:${proxyConfig.proxyPort}/calls`;
@@ -297,9 +297,9 @@ export default {
             // vm.balanceMapping[ret.result.tokenid] = ret.result.balance;
             vm.$set(vm.balanceMapping, response.data.tokenid, balance);
             if (!vm.pokemonAPIDataLoaded) {
-              let pokemonName = pokemontxlist[tokenid];
-              let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${pokemonName}`;
-              let proxyAPI = `http://${proxyConfig.proxyHost}:${proxyConfig.proxyPort}/pokemon/${pokemonName}`;
+              let tokenName = tokentxList[tokenid];
+              let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${tokenName}`;
+              let proxyAPI = `http://${proxyConfig.proxyHost}:${proxyConfig.proxyPort}/pokemon/${tokenName}`;
               axios
                 .get(proxyAPI)
                 .then(reponse => {
@@ -322,8 +322,8 @@ export default {
         //     // vm.balanceMapping[ret.result.tokenid] = ret.result.balance;
         //     vm.$set(vm.balanceMapping, ret.result.tokenid, balance);
         //     if (!vm.pokemonAPIDataLoaded) {
-        //       let pokemonName = pokemontxlist[tokenid];
-        //       let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${pokemonName}`;
+        //       let tokenName = tokentxList[tokenid];
+        //       let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${tokenName}`;
         //       axios
         //         .get(pokemonUrl)
         //         .then(reponse => {
@@ -531,5 +531,3 @@ export default {
 
 <style>
 </style>
-
-

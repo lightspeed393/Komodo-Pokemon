@@ -17,7 +17,7 @@
           <v-chip
             class="my-1"
             v-for="type in types"
-            :color="pokemonTypeColors[type]"
+            :color="tokenColors[type]"
             :key="type"
           >{{ type }}</v-chip>
         </v-col>
@@ -81,7 +81,7 @@
 
 <script>
 import axios from "axios";
-import pokemonTypeColors from "~/static/tokenColors.js";
+import tokenColors from "~/static/tokenColors.js";
 export default {
   props: {
     localProxy: {
@@ -105,7 +105,7 @@ export default {
   },
   data() {
     return {
-      pokemonTypeColors: { ...pokemonTypeColors.colours },
+      tokenColors: { ...tokenColors.colours },
       placeOrderDialog: false,
       quantity: 0
     };

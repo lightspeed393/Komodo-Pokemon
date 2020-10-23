@@ -6,11 +6,11 @@
         <vuetify-logo />
       </div>
       <v-card>
-        <v-card-title class="headline">Welcome to the Spacecoin Token App</v-card-title>
+        <v-card-title class="headline">Welcome to the Spacecoin-Tokens</v-card-title>
         <v-card-text>
-          <p>Spacecoin Token App is a user interface for working with tokens on the SPACE blockchain.</p>
+          <p>Spacecoin-Tokens is an app for working with tokens on the SPACE blockchain.</p>
           <p>
-            For more information on Vuetify, check out the
+            For more information on Spacecoin-Tokens, check out the
             <a href="https://spaceworks.co/guides" target="_blank">guides</a>.
           </p>
           <p>

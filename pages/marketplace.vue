@@ -89,15 +89,15 @@
       You don't have any tokens yet!
       <v-icon>mdi-emoticon-sad</v-icon>
     </h3>
-    <!-- <PokemonCard
+    <!-- <TokenCard
         v-if="pokemonAPIDataLoaded && totalBalance"
         v-for="element in myPokemonAPIDataRaw"
         v-bind:myPokemonInfo="element"
         v-bind:isMine="isMine"
         v-bind:signed="signed"
         v-bind:key="element.pokemonTokenData[0].number"
-    ></PokemonCard>-->
-    <!-- <PokemonCard
+    ></TokenCard>-->
+    <!-- <TokenCard
         v-if="balanceMapping[name]"
         v-for="(value, name) of myPokemonAPIDataRaw"
         v-bind:tokenID="name"
@@ -105,7 +105,7 @@
         v-bind:balance="balanceMapping[name]"
         v-bind:isMine="isMine"
         v-bind:signed="signed"
-    ></PokemonCard>-->
+    ></TokenCard>-->
     <!-- <v-alert dense border="left" type="warning" v-show="showWarning"
         >Please sign & verify with correct private/public keys pair</v-alert
     >-->
@@ -137,7 +137,7 @@
     </v-dialog>-->
 
     <!-- <div class="d-flex flex-row flex-wrap">
-        <PokemonCard
+        <TokenCard
           v-if="pokemonAPIDataLoaded && balanceMapping[name]"
           v-for="(value, name) of myPokemonAPIDataRaw"
           v-bind:tokenID="name"
@@ -149,7 +149,7 @@
           :transferEnabled="transferEnabled"
           :localProxy="localProxy"
           :destPubkey="destPubkeyData"
-        ></PokemonCard>
+        ></TokenCard>
     </div>-->
     <div class="d-flex flex-row flex-wrap">
       <TokenOrderCard v-for="order in ordersData" :key="order.txid" :orderData="order"></TokenOrderCard>
@@ -159,7 +159,7 @@
 
 <script>
 // import RpcClient from "~/modules/bitcoindrpc";
-import pokemontxlist from "~/static/pokemontxList.js";
+import tokentxList from "~/static/tokenList.js";
 import axios from "axios";
 import TokenOrderCard from "~/components/tokenOrderCard";
 import rpcConfig from "~/rpcConfig";
@@ -213,7 +213,7 @@ export default {
     // const testfunction = require("~/src/test");
     // testfunction.hello();
     // testfunction.goodbye();
-    // console.log(pokemontxlist);
+    // console.log(tokentxList);
     // var text = '{"name":"John", "age":30, "city":"New York"}';
     // console.log("this is a text", text);
     // text = text.replace(/\\/g, "");
@@ -272,7 +272,7 @@ export default {
       this.ordersPerTokenData = [];
       this.ordersData = [];
       let vm = this;
-      Object.keys(pokemontxlist).forEach(tokenid => {
+      Object.keys(tokentxList).forEach(tokenid => {
         axios
           .post(vm.localProxy, { method: "tokenOrders", params: [tokenid] })
           .then(function(response) {
@@ -290,7 +290,7 @@ export default {
     balanceChecking() {
       console.log("checking balance");
       let vm = this;
-      Object.keys(pokemontxlist).forEach(tokenid => {
+      Object.keys(tokentxList).forEach(tokenid => {
         var arg = vm.pubkeyData ? [tokenid, vm.pubkeyData] : [tokenid];
 
         // const localProxy = `http://${proxyConfig.proxyHost}:${proxyConfig.proxyPort}/calls`;
@@ -314,9 +314,9 @@ export default {
             // vm.balanceMapping[ret.result.tokenid] = ret.result.balance;
             vm.$set(vm.balanceMapping, response.data.tokenid, balance);
             if (!vm.pokemonAPIDataLoaded) {
-              let pokemonName = pokemontxlist[tokenid];
-              let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${pokemonName}`;
-              let proxyAPI = `http://${proxyConfig.proxyHost}:${proxyConfig.proxyPort}/pokemon/${pokemonName}`;
+              let tokenName = tokentxList[tokenid];
+              let pokemonUrl = `https://pokeapi.glitch.me/v1/pokemon/${tokenName}`;
+              let proxyAPI = `http://${proxyConfig.proxyHost}:${proxyConfig.proxyPort}/pokemon/${tokenName}`;
               axios
                 .get(proxyAPI)
                 .then(reponse => {
